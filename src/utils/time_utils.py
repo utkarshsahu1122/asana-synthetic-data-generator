@@ -1,17 +1,16 @@
 import random
 from datetime import datetime, timedelta
 
-# Relative acceptance weights for task creation/update times.
-# Encodes typical human work intensity across the week.
-# Values are heuristic, ordered, and intentionally non-zero for weekends.
-WEEKDAY_WEIGHTS = {
-    0: 1.2,  # Monday
-    1: 1.2,
-    2: 1.1,
-    3: 1.0,
-    4: 0.9,
-    5: 0.2,  # Saturday
-    6: 0.2,  # Sunday
+# Probability of accepting a sampled timestamp by weekday.
+# Encodes realistic human work intensity.
+WEEKDAY_ACCEPT_PROB = {
+    0: 0.30,  # Monday
+    1: 0.30,
+    2: 0.28,
+    3: 0.25,
+    4: 0.22,
+    5: 0.05,  # Saturday
+    6: 0.05,  # Sunday
 }
 
 def random_datetime(start: datetime, end: datetime) -> datetime:
@@ -19,7 +18,7 @@ def random_datetime(start: datetime, end: datetime) -> datetime:
     seconds = delta.total_seconds()
     while True:
         dt = start + timedelta(seconds=random.uniform(0, seconds))
-        if random.random() < WEEKDAY_WEIGHTS[dt.weekday()]:
+        if random.random() < WEEKDAY_ACCEPT_PROB[dt.weekday()]:
             return dt
 
 def random_due_date(created_at: datetime) -> datetime | None:
