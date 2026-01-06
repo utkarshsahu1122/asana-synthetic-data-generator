@@ -8,9 +8,13 @@ def get_connection():
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
 
-def execute_script(sql_path: str):
+def initialize_schema(sql_path: str):
     conn = get_connection()
     with open(sql_path, "r") as f:
         conn.executescript(f.read())
     conn.commit()
     conn.close()
+
+def table_has_rows(conn, table_name: str) -> bool:
+    cursor = conn.execute(f"SELECT 1 FROM {table_name} LIMIT 1;")
+    return cursor.fetchone() is not None

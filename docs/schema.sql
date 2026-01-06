@@ -8,14 +8,14 @@
 
 PRAGMA foreign_keys = ON;
 
-CREATE TABLE organizations (
+CREATE TABLE IF NOT EXISTS organizations (
     org_id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     domain TEXT,
     created_at TIMESTAMP
 );
 
-CREATE TABLE teams (
+CREATE TABLE IF NOT EXISTS teams (
     team_id TEXT PRIMARY KEY,
     org_id TEXT NOT NULL,
     name TEXT NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE teams (
     FOREIGN KEY (org_id) REFERENCES organizations(org_id)
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     user_id TEXT PRIMARY KEY,
     org_id TEXT NOT NULL,
     first_name TEXT NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE users (
     FOREIGN KEY (org_id) REFERENCES organizations(org_id)
 );
 
-CREATE TABLE team_memberships (
+CREATE TABLE IF NOT EXISTS team_memberships (
     membership_id TEXT PRIMARY KEY,
     team_id TEXT NOT NULL,
     user_id TEXT NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE team_memberships (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
     project_id TEXT PRIMARY KEY,
     org_id TEXT NOT NULL,
     team_id TEXT,
@@ -60,7 +60,7 @@ CREATE TABLE projects (
     FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
 
-CREATE TABLE sections (
+CREATE TABLE IF NOT EXISTS sections (
     section_id TEXT PRIMARY KEY,
     project_id TEXT NOT NULL,
     name TEXT NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE sections (
     FOREIGN KEY (project_id) REFERENCES projects(project_id)
 );
 
-CREATE TABLE tasks (
+CREATE TABLE IF NOT EXISTS tasks (
     task_id TEXT PRIMARY KEY,
     project_id TEXT,
     section_id TEXT,
@@ -90,7 +90,7 @@ CREATE TABLE tasks (
     FOREIGN KEY (assignee_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE subtasks (
+CREATE TABLE IF NOT EXISTS subtasks (
     subtask_id TEXT PRIMARY KEY,
     parent_task_id TEXT NOT NULL,
     task_id TEXT NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE subtasks (
     FOREIGN KEY (task_id) REFERENCES tasks(task_id)
 );
 
-CREATE TABLE comments (
+CREATE TABLE IF NOT EXISTS comments (
     comment_id TEXT PRIMARY KEY,
     task_id TEXT NOT NULL,
     user_id TEXT,
@@ -108,7 +108,7 @@ CREATE TABLE comments (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE custom_field_definitions (
+CREATE TABLE IF NOT EXISTS custom_field_definitions (
     custom_field_id TEXT PRIMARY KEY,
     org_id TEXT,
     name TEXT,
@@ -119,7 +119,7 @@ CREATE TABLE custom_field_definitions (
     FOREIGN KEY (org_id) REFERENCES organizations(org_id)
 );
 
-CREATE TABLE custom_field_values (
+CREATE TABLE IF NOT EXISTS custom_field_values (
     id TEXT PRIMARY KEY,
     custom_field_id TEXT NOT NULL,
     object_type TEXT,
@@ -132,7 +132,7 @@ CREATE TABLE custom_field_values (
     FOREIGN KEY (custom_field_id) REFERENCES custom_field_definitions(custom_field_id)
 );
 
-CREATE TABLE tags (
+CREATE TABLE IF NOT EXISTS tags (
     tag_id TEXT PRIMARY KEY,
     org_id TEXT,
     name TEXT,
@@ -141,7 +141,7 @@ CREATE TABLE tags (
     FOREIGN KEY (org_id) REFERENCES organizations(org_id)
 );
 
-CREATE TABLE task_tags (
+CREATE TABLE IF NOT EXISTS task_tags (
     id TEXT PRIMARY KEY,
     task_id TEXT NOT NULL,
     tag_id TEXT NOT NULL,
