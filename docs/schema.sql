@@ -1,0 +1,7 @@
+-- Asana-like relational schema
+-- Target DB: SQLite
+-- Design goals:
+-- 1. Relational consistency
+-- 2. Realistic task hierarchies
+-- 3. Extensibility for analytics
+-- 4. Support for custom fields
