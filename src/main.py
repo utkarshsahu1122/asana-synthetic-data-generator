@@ -8,6 +8,8 @@ from db import (
     table_has_rows,
 )
 
+from generators.tasks import generate_tasks
+from generators.comments import generate_comments
 from generators.organizations import generate_organization
 from generators.teams import generate_teams
 from generators.users import generate_users
@@ -104,6 +106,20 @@ def main():
     if not table_has_rows(conn, "sections"):
         sections = generate_sections(projects)
         insert_many(conn, "sections", sections)
+    else:
+        sections = fetch_all_as_dicts(conn, "sections")
+        
+    # -----------------------
+    # Tasks (append-only)
+    # -----------------------
+    tasks = generate_tasks(projects, sections, users)
+    insert_many(conn, "tasks", tasks)
+
+    # -----------------------
+    # Comments (append-only)
+    # -----------------------
+    comments = generate_comments(tasks, users)
+    insert_many(conn, "comments", comments)
 
     conn.commit()
     conn.close()
