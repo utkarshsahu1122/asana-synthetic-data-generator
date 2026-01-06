@@ -1,6 +1,9 @@
 import random
 from datetime import datetime, timedelta
 
+# Relative acceptance weights for task creation/update times.
+# Encodes typical human work intensity across the week.
+# Values are heuristic, ordered, and intentionally non-zero for weekends.
 WEEKDAY_WEIGHTS = {
     0: 1.2,  # Monday
     1: 1.2,
